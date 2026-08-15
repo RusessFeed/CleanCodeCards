@@ -2,14 +2,28 @@ import Foundation
 
 final class DeckStore: ObservableObject {
     @Published private(set) var cards: [StudyCard]
+    @Published private(set) var favoriteCardIDs: Set<UUID>
 
-    init(cards: [StudyCard] = StudyCard.samples) {
+    init(cards: [StudyCard] = StudyCard.samples, favoriteCardIDs: Set<UUID> = []) {
         self.cards = cards
+        self.favoriteCardIDs = favoriteCardIDs
     }
 
     func cards(matching topic: StudyCard.Topic?) -> [StudyCard] {
         guard let topic else { return cards }
         return cards.filter { $0.topic == topic }
+    }
+
+    func isFavorite(_ card: StudyCard) -> Bool {
+        favoriteCardIDs.contains(card.id)
+    }
+
+    func toggleFavorite(_ card: StudyCard) {
+        if isFavorite(card) {
+            favoriteCardIDs.remove(card.id)
+        } else {
+            favoriteCardIDs.insert(card.id)
+        }
     }
 }
 

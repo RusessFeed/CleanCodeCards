@@ -8,11 +8,18 @@ struct CardsView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: CCLayout.large) {
                     HeroHeader()
-                    TopicFilter(selectedTopic: $viewModel.selectedTopic)
+                    TopicFilter(
+                        selectedTopic: $viewModel.selectedTopic,
+                        showsFavoritesOnly: $viewModel.showsFavoritesOnly
+                    )
 
                     LazyVStack(spacing: CCLayout.medium) {
                         ForEach(viewModel.filteredCards) { card in
-                            StudyCardView(card: card)
+                            StudyCardView(
+                                card: card,
+                                isFavorite: viewModel.isFavorite(card),
+                                onFavoriteToggle: { viewModel.toggleFavorite(card) }
+                            )
                         }
                     }
                 }
@@ -41,10 +48,15 @@ private struct HeroHeader: View {
 
 private struct TopicFilter: View {
     @Binding var selectedTopic: StudyCard.Topic?
+    @Binding var showsFavoritesOnly: Bool
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
+                TopicChip(title: "Favorites", systemImage: "star.fill", isSelected: showsFavoritesOnly) {
+                    showsFavoritesOnly.toggle()
+                }
+
                 TopicChip(title: "All", systemImage: "square.grid.2x2", isSelected: selectedTopic == nil) {
                     selectedTopic = nil
                 }
@@ -79,13 +91,26 @@ private struct TopicChip: View {
 
 private struct StudyCardView: View {
     let card: StudyCard
+    let isFavorite: Bool
+    let onFavoriteToggle: () -> Void
     @State private var isAnswerVisible = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CCLayout.medium) {
-            Label(card.topic.rawValue, systemImage: card.topic.systemImage)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(CCColor.accent)
+            HStack {
+                Label(card.topic.rawValue, systemImage: card.topic.systemImage)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CCColor.accent)
+
+                Spacer()
+
+                Button(action: onFavoriteToggle) {
+                    Image(systemName: isFavorite ? "star.fill" : "star")
+                        .foregroundStyle(isFavorite ? CCColor.warning : .secondary)
+                        .accessibilityLabel(isFavorite ? "Remove from favorites" : "Add to favorites")
+                }
+                .buttonStyle(.plain)
+            }
 
             Text(card.title)
                 .font(.title3.bold())

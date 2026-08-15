@@ -26,4 +26,30 @@ final class CardsViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.filteredCards.map(\.title), ["Mocks"])
     }
+
+    func testFavoritesFilterShowsOnlyMarkedCards() {
+        let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let store = DeckStore(cards: [swiftCard, testingCard])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.toggleFavorite(testingCard)
+        viewModel.showsFavoritesOnly = true
+
+        XCTAssertEqual(viewModel.filteredCards, [testingCard])
+        XCTAssertTrue(viewModel.isFavorite(testingCard))
+    }
+
+    func testFavoriteFilterCombinesWithTopicFilter() {
+        let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let store = DeckStore(cards: [swiftCard, testingCard])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.toggleFavorite(testingCard)
+        viewModel.selectedTopic = .swift
+        viewModel.showsFavoritesOnly = true
+
+        XCTAssertTrue(viewModel.filteredCards.isEmpty)
+    }
 }

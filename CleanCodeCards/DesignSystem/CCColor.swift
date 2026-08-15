@@ -3,6 +3,7 @@ import SwiftUI
 enum CCColor {
     static let accent = Color(hex: "#5B5FEF")
     static let positive = Color(hex: "#17B26A")
+    static let warning = Color(hex: "#F79009")
     static let canvas = Color(uiColor: .systemGroupedBackground)
     static let card = Color(uiColor: .secondarySystemGroupedBackground)
 }
