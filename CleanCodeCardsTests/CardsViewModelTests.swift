@@ -52,4 +52,24 @@ final class CardsViewModelTests: XCTestCase {
 
         XCTAssertTrue(viewModel.filteredCards.isEmpty)
     }
+
+    func testStudySummaryReflectsVisibleAndFavoriteCards() {
+        let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let store = DeckStore(cards: [swiftCard, testingCard])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.toggleFavorite(testingCard)
+        viewModel.searchText = "structs"
+
+        XCTAssertEqual(
+            viewModel.studySummary,
+            CardsViewModel.StudySummary(
+                totalCards: 2,
+                visibleCards: 1,
+                favoriteCards: 1,
+                topicCount: StudyCard.Topic.allCases.count
+            )
+        )
+    }
 }

@@ -7,7 +7,7 @@ struct CardsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: CCLayout.large) {
-                    HeroHeader()
+                    HeroHeader(summary: viewModel.studySummary)
                     TopicFilter(
                         selectedTopic: $viewModel.selectedTopic,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
@@ -33,16 +33,45 @@ struct CardsView: View {
 }
 
 private struct HeroHeader: View {
+    let summary: CardsViewModel.StudySummary
+
     var body: some View {
-        VStack(alignment: .leading, spacing: CCLayout.small) {
+        VStack(alignment: .leading, spacing: CCLayout.medium) {
             Text("Interview-ready iOS thinking")
                 .font(.largeTitle.bold())
             Text("Practice architecture, Swift, testing, and performance answers in focused cards.")
                 .foregroundStyle(.secondary)
+
+            HStack(spacing: CCLayout.small) {
+                SummaryPill(title: "Cards", value: "\(summary.totalCards)")
+                SummaryPill(title: "Visible", value: "\(summary.visibleCards)")
+                SummaryPill(title: "Favorites", value: "\(summary.favoriteCards)")
+                SummaryPill(title: "Topics", value: "\(summary.topicCount)")
+            }
+            .padding(.top, CCLayout.small)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(CCLayout.large)
         .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
+    }
+}
+
+private struct SummaryPill: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(value)
+                .font(.headline.monospacedDigit())
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(CCColor.canvas, in: RoundedRectangle(cornerRadius: 16))
     }
 }
 

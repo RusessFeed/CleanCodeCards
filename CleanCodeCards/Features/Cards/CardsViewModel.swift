@@ -2,6 +2,13 @@ import Foundation
 
 @MainActor
 final class CardsViewModel: ObservableObject {
+    struct StudySummary: Equatable {
+        let totalCards: Int
+        let visibleCards: Int
+        let favoriteCards: Int
+        let topicCount: Int
+    }
+
     @Published var selectedTopic: StudyCard.Topic?
     @Published var searchText = ""
     @Published var showsFavoritesOnly = false
@@ -26,6 +33,15 @@ final class CardsViewModel: ObservableObject {
                 || card.prompt.localizedCaseInsensitiveContains(query)
                 || card.answer.localizedCaseInsensitiveContains(query)
         }
+    }
+
+    var studySummary: StudySummary {
+        StudySummary(
+            totalCards: deckStore.cards.count,
+            visibleCards: filteredCards.count,
+            favoriteCards: deckStore.favoriteCardIDs.count,
+            topicCount: StudyCard.Topic.allCases.count
+        )
     }
 
     func isFavorite(_ card: StudyCard) -> Bool {
