@@ -13,13 +13,17 @@ struct CardsView: View {
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
                     )
 
-                    LazyVStack(spacing: CCLayout.medium) {
-                        ForEach(viewModel.filteredCards) { card in
-                            StudyCardView(
-                                card: card,
-                                isFavorite: viewModel.isFavorite(card),
-                                onFavoriteToggle: { viewModel.toggleFavorite(card) }
-                            )
+                    if let emptyStateMessage = viewModel.emptyStateMessage {
+                        EmptyCardsView(message: emptyStateMessage)
+                    } else {
+                        LazyVStack(spacing: CCLayout.medium) {
+                            ForEach(viewModel.filteredCards) { card in
+                                StudyCardView(
+                                    card: card,
+                                    isFavorite: viewModel.isFavorite(card),
+                                    onFavoriteToggle: { viewModel.toggleFavorite(card) }
+                                )
+                            }
                         }
                     }
                 }
@@ -29,6 +33,30 @@ struct CardsView: View {
             .navigationTitle("Clean Code Cards")
             .searchable(text: $viewModel.searchText, prompt: "Search cards")
         }
+    }
+}
+
+private struct EmptyCardsView: View {
+    let message: String
+
+    var body: some View {
+        VStack(spacing: CCLayout.medium) {
+            Image(systemName: "magnifyingglass.circle.fill")
+                .font(.system(size: 48))
+                .foregroundStyle(CCColor.accent)
+                .symbolRenderingMode(.hierarchical)
+
+            Text("Nothing to review")
+                .font(.title3.bold())
+
+            Text(message)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(CCLayout.large)
+        .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
     }
 }
 

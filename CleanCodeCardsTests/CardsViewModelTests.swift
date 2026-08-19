@@ -72,4 +72,26 @@ final class CardsViewModelTests: XCTestCase {
             )
         )
     }
+
+    func testEmptyStateExplainsSearchMiss() {
+        let store = DeckStore(cards: [
+            StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.searchText = "Combine"
+
+        XCTAssertEqual(viewModel.emptyStateMessage, "No cards match “Combine”.")
+    }
+
+    func testEmptyStateExplainsEmptyFavorites() {
+        let store = DeckStore(cards: [
+            StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.showsFavoritesOnly = true
+
+        XCTAssertEqual(viewModel.emptyStateMessage, "No favorite cards match the current filters.")
+    }
 }

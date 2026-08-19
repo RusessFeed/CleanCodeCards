@@ -44,6 +44,21 @@ final class CardsViewModel: ObservableObject {
         )
     }
 
+    var emptyStateMessage: String? {
+        guard filteredCards.isEmpty else { return nil }
+
+        if showsFavoritesOnly {
+            return "No favorite cards match the current filters."
+        }
+
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !query.isEmpty {
+            return "No cards match “\(query)”."
+        }
+
+        return "No cards are available for this topic yet."
+    }
+
     func isFavorite(_ card: StudyCard) -> Bool {
         deckStore.isFavorite(card)
     }
