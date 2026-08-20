@@ -73,6 +73,25 @@ final class CardsViewModelTests: XCTestCase {
         )
     }
 
+    func testTopicBreakdownCountsCardsPerTopic() {
+        let cards = [
+            StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .swift, title: "Actors", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ]
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: cards))
+
+        XCTAssertEqual(
+            viewModel.topicBreakdown,
+            [
+                CardsViewModel.TopicBreakdown(topic: .architecture, cardCount: 0),
+                CardsViewModel.TopicBreakdown(topic: .swift, cardCount: 2),
+                CardsViewModel.TopicBreakdown(topic: .testing, cardCount: 1),
+                CardsViewModel.TopicBreakdown(topic: .performance, cardCount: 0)
+            ]
+        )
+    }
+
     func testEmptyStateExplainsSearchMiss() {
         let store = DeckStore(cards: [
             StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")

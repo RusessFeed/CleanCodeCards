@@ -9,6 +9,13 @@ final class CardsViewModel: ObservableObject {
         let topicCount: Int
     }
 
+    struct TopicBreakdown: Identifiable, Equatable {
+        let topic: StudyCard.Topic
+        let cardCount: Int
+
+        var id: StudyCard.Topic { topic }
+    }
+
     @Published var selectedTopic: StudyCard.Topic?
     @Published var searchText = ""
     @Published var showsFavoritesOnly = false
@@ -42,6 +49,15 @@ final class CardsViewModel: ObservableObject {
             favoriteCards: deckStore.favoriteCardIDs.count,
             topicCount: StudyCard.Topic.allCases.count
         )
+    }
+
+    var topicBreakdown: [TopicBreakdown] {
+        StudyCard.Topic.allCases.map { topic in
+            TopicBreakdown(
+                topic: topic,
+                cardCount: deckStore.cards.filter { $0.topic == topic }.count
+            )
+        }
     }
 
     var emptyStateMessage: String? {

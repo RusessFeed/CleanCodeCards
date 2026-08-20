@@ -7,7 +7,10 @@ struct CardsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: CCLayout.large) {
-                    HeroHeader(summary: viewModel.studySummary)
+                    HeroHeader(
+                        summary: viewModel.studySummary,
+                        topicBreakdown: viewModel.topicBreakdown
+                    )
                     TopicFilter(
                         selectedTopic: $viewModel.selectedTopic,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
@@ -62,6 +65,7 @@ private struct EmptyCardsView: View {
 
 private struct HeroHeader: View {
     let summary: CardsViewModel.StudySummary
+    let topicBreakdown: [CardsViewModel.TopicBreakdown]
 
     var body: some View {
         VStack(alignment: .leading, spacing: CCLayout.medium) {
@@ -77,10 +81,47 @@ private struct HeroHeader: View {
                 SummaryPill(title: "Topics", value: "\(summary.topicCount)")
             }
             .padding(.top, CCLayout.small)
+
+            VStack(alignment: .leading, spacing: CCLayout.small) {
+                Text("Topic mix")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                ForEach(topicBreakdown) { item in
+                    TopicBreakdownRow(item: item, totalCards: summary.totalCards)
+                }
+            }
+            .padding(.top, CCLayout.small)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(CCLayout.large)
         .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
+    }
+}
+
+private struct TopicBreakdownRow: View {
+    let item: CardsViewModel.TopicBreakdown
+    let totalCards: Int
+
+    private var progress: Double {
+        guard totalCards > 0 else { return 0 }
+        return Double(item.cardCount) / Double(totalCards)
+    }
+
+    var body: some View {
+        HStack(spacing: CCLayout.small) {
+            Label(item.topic.rawValue, systemImage: item.topic.systemImage)
+                .font(.caption.weight(.medium))
+                .frame(width: 118, alignment: .leading)
+
+            ProgressView(value: progress)
+                .tint(CCColor.accent)
+
+            Text("\(item.cardCount)")
+                .font(.caption.monospacedDigit().weight(.semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 22, alignment: .trailing)
+        }
     }
 }
 
