@@ -113,4 +113,37 @@ final class CardsViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.emptyStateMessage, "No favorite cards match the current filters.")
     }
+
+    func testFocusSuggestionPrefersFavoriteVisibleCard() {
+        let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let store = DeckStore(cards: [swiftCard, testingCard])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.toggleFavorite(testingCard)
+
+        XCTAssertEqual(
+            viewModel.focusSuggestion,
+            CardsViewModel.FocusSuggestion(
+                title: "Fakes",
+                reason: "Start with a favorite card while it is top of mind."
+            )
+        )
+    }
+
+    func testFocusSuggestionUsesFirstVisibleCardWhenNoFavoriteMatches() {
+        let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: [swiftCard, testingCard]))
+
+        viewModel.selectedTopic = .swift
+
+        XCTAssertEqual(
+            viewModel.focusSuggestion,
+            CardsViewModel.FocusSuggestion(
+                title: "Structs",
+                reason: "A quick warm-up card for the current filters."
+            )
+        )
+    }
 }

@@ -9,7 +9,8 @@ struct CardsView: View {
                 VStack(alignment: .leading, spacing: CCLayout.large) {
                     HeroHeader(
                         summary: viewModel.studySummary,
-                        topicBreakdown: viewModel.topicBreakdown
+                        topicBreakdown: viewModel.topicBreakdown,
+                        focusSuggestion: viewModel.focusSuggestion
                     )
                     TopicFilter(
                         selectedTopic: $viewModel.selectedTopic,
@@ -66,6 +67,7 @@ private struct EmptyCardsView: View {
 private struct HeroHeader: View {
     let summary: CardsViewModel.StudySummary
     let topicBreakdown: [CardsViewModel.TopicBreakdown]
+    let focusSuggestion: CardsViewModel.FocusSuggestion?
 
     var body: some View {
         VStack(alignment: .leading, spacing: CCLayout.medium) {
@@ -82,6 +84,10 @@ private struct HeroHeader: View {
             }
             .padding(.top, CCLayout.small)
 
+            if let focusSuggestion {
+                FocusSuggestionCard(suggestion: focusSuggestion)
+            }
+
             VStack(alignment: .leading, spacing: CCLayout.small) {
                 Text("Topic mix")
                     .font(.subheadline.weight(.semibold))
@@ -96,6 +102,32 @@ private struct HeroHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(CCLayout.large)
         .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
+    }
+}
+
+private struct FocusSuggestionCard: View {
+    let suggestion: CardsViewModel.FocusSuggestion
+
+    var body: some View {
+        HStack(alignment: .top, spacing: CCLayout.small) {
+            Image(systemName: "sparkles")
+                .font(.headline)
+                .foregroundStyle(CCColor.accent)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Focus next")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Text(suggestion.title)
+                    .font(.headline)
+                Text(suggestion.reason)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(CCLayout.medium)
+        .background(CCColor.canvas, in: RoundedRectangle(cornerRadius: 18))
     }
 }
 

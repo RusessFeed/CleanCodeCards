@@ -16,6 +16,11 @@ final class CardsViewModel: ObservableObject {
         var id: StudyCard.Topic { topic }
     }
 
+    struct FocusSuggestion: Equatable {
+        let title: String
+        let reason: String
+    }
+
     @Published var selectedTopic: StudyCard.Topic?
     @Published var searchText = ""
     @Published var showsFavoritesOnly = false
@@ -73,6 +78,21 @@ final class CardsViewModel: ObservableObject {
         }
 
         return "No cards are available for this topic yet."
+    }
+
+    var focusSuggestion: FocusSuggestion? {
+        if let favoriteCard = filteredCards.first(where: { deckStore.isFavorite($0) }) {
+            return FocusSuggestion(
+                title: favoriteCard.title,
+                reason: "Start with a favorite card while it is top of mind."
+            )
+        }
+
+        guard let firstCard = filteredCards.first else { return nil }
+        return FocusSuggestion(
+            title: firstCard.title,
+            reason: "A quick warm-up card for the current filters."
+        )
     }
 
     func isFavorite(_ card: StudyCard) -> Bool {
