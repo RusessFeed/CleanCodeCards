@@ -95,6 +95,25 @@ final class CardsViewModel: ObservableObject {
         )
     }
 
+    var filterSummaryText: String {
+        var filters: [String] = []
+
+        if let selectedTopic {
+            filters.append(selectedTopic.rawValue)
+        }
+
+        if showsFavoritesOnly {
+            filters.append("Favorites")
+        }
+
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !query.isEmpty {
+            filters.append("Search: \(query)")
+        }
+
+        return filters.isEmpty ? "Showing all study cards" : filters.joined(separator: " · ")
+    }
+
     func isFavorite(_ card: StudyCard) -> Bool {
         deckStore.isFavorite(card)
     }

@@ -16,6 +16,7 @@ struct CardsView: View {
                         selectedTopic: $viewModel.selectedTopic,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
                     )
+                    FilterSummary(text: viewModel.filterSummaryText)
 
                     if let emptyStateMessage = viewModel.emptyStateMessage {
                         EmptyCardsView(message: emptyStateMessage)
@@ -37,6 +38,20 @@ struct CardsView: View {
             .navigationTitle("Clean Code Cards")
             .searchable(text: $viewModel.searchText, prompt: "Search cards")
         }
+    }
+}
+
+private struct FilterSummary: View {
+    let text: String
+
+    var body: some View {
+        Label(text, systemImage: "line.3.horizontal.decrease.circle")
+            .font(.footnote.weight(.medium))
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, CCLayout.medium)
+            .padding(.vertical, 10)
+            .background(CCColor.card, in: Capsule())
     }
 }
 
