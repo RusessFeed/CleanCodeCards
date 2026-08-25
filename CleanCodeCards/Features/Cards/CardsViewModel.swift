@@ -114,6 +114,18 @@ final class CardsViewModel: ObservableObject {
         return filters.isEmpty ? "Showing all study cards" : filters.joined(separator: " · ")
     }
 
+    var hasActiveFilters: Bool {
+        selectedTopic != nil
+            || showsFavoritesOnly
+            || !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    func clearFilters() {
+        selectedTopic = nil
+        showsFavoritesOnly = false
+        searchText = ""
+    }
+
     func isFavorite(_ card: StudyCard) -> Bool {
         deckStore.isFavorite(card)
     }

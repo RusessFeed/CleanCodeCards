@@ -164,4 +164,36 @@ final class CardsViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.filterSummaryText, "Showing all study cards")
     }
+
+    func testHasActiveFiltersDetectsSearchTopicAndFavorites() {
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: []))
+
+        XCTAssertFalse(viewModel.hasActiveFilters)
+
+        viewModel.searchText = "state"
+        XCTAssertTrue(viewModel.hasActiveFilters)
+
+        viewModel.searchText = ""
+        viewModel.selectedTopic = .swift
+        XCTAssertTrue(viewModel.hasActiveFilters)
+
+        viewModel.selectedTopic = nil
+        viewModel.showsFavoritesOnly = true
+        XCTAssertTrue(viewModel.hasActiveFilters)
+    }
+
+    func testClearFiltersResetsSearchTopicAndFavorites() {
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: []))
+
+        viewModel.searchText = "state"
+        viewModel.selectedTopic = .swift
+        viewModel.showsFavoritesOnly = true
+
+        viewModel.clearFilters()
+
+        XCTAssertEqual(viewModel.searchText, "")
+        XCTAssertNil(viewModel.selectedTopic)
+        XCTAssertFalse(viewModel.showsFavoritesOnly)
+        XCTAssertFalse(viewModel.hasActiveFilters)
+    }
 }

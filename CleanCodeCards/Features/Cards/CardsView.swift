@@ -16,7 +16,11 @@ struct CardsView: View {
                         selectedTopic: $viewModel.selectedTopic,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
                     )
-                    FilterSummary(text: viewModel.filterSummaryText)
+                    FilterSummary(
+                        text: viewModel.filterSummaryText,
+                        showsClearButton: viewModel.hasActiveFilters,
+                        onClear: viewModel.clearFilters
+                    )
 
                     if let emptyStateMessage = viewModel.emptyStateMessage {
                         EmptyCardsView(message: emptyStateMessage)
@@ -43,15 +47,29 @@ struct CardsView: View {
 
 private struct FilterSummary: View {
     let text: String
+    let showsClearButton: Bool
+    let onClear: () -> Void
 
     var body: some View {
-        Label(text, systemImage: "line.3.horizontal.decrease.circle")
-            .font(.footnote.weight(.medium))
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, CCLayout.medium)
-            .padding(.vertical, 10)
-            .background(CCColor.card, in: Capsule())
+        HStack(spacing: CCLayout.small) {
+            Label(text, systemImage: "line.3.horizontal.decrease.circle")
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            if showsClearButton {
+                Button("Clear") {
+                    onClear()
+                }
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(CCColor.accent)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, CCLayout.medium)
+        .padding(.vertical, 10)
+        .background(CCColor.card, in: Capsule())
     }
 }
 
