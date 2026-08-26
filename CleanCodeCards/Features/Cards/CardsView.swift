@@ -16,8 +16,9 @@ struct CardsView: View {
                         selectedTopic: $viewModel.selectedTopic,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
                     )
+                    SortPicker(sortOrder: $viewModel.sortOrder)
                     FilterSummary(
-                        text: viewModel.filterSummaryText,
+                        text: "\(viewModel.filterSummaryText) · \(viewModel.sortSummaryText)",
                         showsClearButton: viewModel.hasActiveFilters,
                         onClear: viewModel.clearFilters
                     )
@@ -42,6 +43,19 @@ struct CardsView: View {
             .navigationTitle("Clean Code Cards")
             .searchable(text: $viewModel.searchText, prompt: "Search cards")
         }
+    }
+}
+
+private struct SortPicker: View {
+    @Binding var sortOrder: CardsViewModel.SortOrder
+
+    var body: some View {
+        Picker("Sort cards", selection: $sortOrder) {
+            ForEach(CardsViewModel.SortOrder.allCases) { order in
+                Text(order.rawValue).tag(order)
+            }
+        }
+        .pickerStyle(.segmented)
     }
 }
 

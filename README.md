@@ -7,6 +7,7 @@ CleanCodeCards is a compact SwiftUI portfolio app for practicing iOS interview a
 - Static study cards grouped by Architecture, Swift, Testing, and Performance
 - Search across prompts and answers
 - Topic chips with a clean SwiftUI card layout
+- Segmented sorting by original order, title, or topic
 - Filter summary text for active study scope
 - Clear filters action for fast search reset
 - Deck summary metrics for visible cards, favorites, and topics

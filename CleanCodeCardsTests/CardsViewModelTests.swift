@@ -196,4 +196,37 @@ final class CardsViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.showsFavoritesOnly)
         XCTAssertFalse(viewModel.hasActiveFilters)
     }
+
+    func testSortsCardsByTitle() {
+        let cards = [
+            StudyCard(topic: .swift, title: "Value types", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .testing, title: "Assertions", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ]
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: cards))
+
+        viewModel.sortOrder = .title
+
+        XCTAssertEqual(viewModel.filteredCards.map(\.title), ["Assertions", "Value types"])
+    }
+
+    func testSortsCardsByTopicThenTitle() {
+        let cards = [
+            StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .architecture, title: "Coordinators", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .architecture, title: "Boundaries", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ]
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: cards))
+
+        viewModel.sortOrder = .topic
+
+        XCTAssertEqual(viewModel.filteredCards.map(\.title), ["Boundaries", "Coordinators", "Fakes"])
+    }
+
+    func testSortSummaryDescribesSelectedSortOrder() {
+        let viewModel = CardsViewModel(deckStore: DeckStore(cards: []))
+
+        viewModel.sortOrder = .title
+
+        XCTAssertEqual(viewModel.sortSummaryText, "Sorted by title")
+    }
 }

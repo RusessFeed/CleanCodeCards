@@ -2,6 +2,14 @@ import Foundation
 
 @MainActor
 final class CardsViewModel: ObservableObject {
+    enum SortOrder: String, CaseIterable, Identifiable {
+        case original = "Original"
+        case title = "Title"
+        case topic = "Topic"
+
+        var id: String { rawValue }
+    }
+
     struct StudySummary: Equatable {
         let totalCards: Int
         let visibleCards: Int
@@ -24,6 +32,7 @@ final class CardsViewModel: ObservableObject {
     @Published var selectedTopic: StudyCard.Topic?
     @Published var searchText = ""
     @Published var showsFavoritesOnly = false
+    @Published var sortOrder: SortOrder = .original
 
     private let deckStore: DeckStore
 
@@ -38,13 +47,13 @@ final class CardsViewModel: ObservableObject {
             : topicCards
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard !query.isEmpty else { return favoriteCards }
+        guard !query.isEmpty else { return sorted(favoriteCards) }
 
-        return favoriteCards.filter { card in
+        return sorted(favoriteCards.filter { card in
             card.title.localizedCaseInsensitiveContains(query)
                 || card.prompt.localizedCaseInsensitiveContains(query)
                 || card.answer.localizedCaseInsensitiveContains(query)
-        }
+        })
     }
 
     var studySummary: StudySummary {
@@ -114,6 +123,10 @@ final class CardsViewModel: ObservableObject {
         return filters.isEmpty ? "Showing all study cards" : filters.joined(separator: " · ")
     }
 
+    var sortSummaryText: String {
+        "Sorted by \(sortOrder.rawValue.lowercased())"
+    }
+
     var hasActiveFilters: Bool {
         selectedTopic != nil
             || showsFavoritesOnly
@@ -133,5 +146,21 @@ final class CardsViewModel: ObservableObject {
     func toggleFavorite(_ card: StudyCard) {
         deckStore.toggleFavorite(card)
         objectWillChange.send()
+    }
+
+    private func sorted(_ cards: [StudyCard]) -> [StudyCard] {
+        switch sortOrder {
+        case .original:
+            return cards
+        case .title:
+            return cards.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        case .topic:
+            return cards.sorted {
+                if $0.topic.rawValue == $1.topic.rawValue {
+                    return $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+                }
+                return $0.topic.rawValue < $1.topic.rawValue
+            }
+        }
     }
 }
