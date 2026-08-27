@@ -26,6 +26,25 @@ final class QuizViewModel: ObservableObject {
         "\(correctAnswers) correct"
     }
 
+    var answeredCount: Int {
+        answeredCardIDs.count
+    }
+
+    var completionProgress: Double {
+        guard !cards.isEmpty else { return 0 }
+        return Double(answeredCount) / Double(cards.count)
+    }
+
+    var accuracyText: String {
+        guard answeredCount > 0 else { return "0% accuracy" }
+        let percent = Int((Double(correctAnswers) / Double(answeredCount) * 100).rounded())
+        return "\(percent)% accuracy"
+    }
+
+    var isFinished: Bool {
+        !cards.isEmpty && answeredCount == cards.count
+    }
+
     func markCurrentAnswer(isCorrect: Bool) {
         guard let card = currentCard, !answeredCardIDs.contains(card.id) else { return }
 
