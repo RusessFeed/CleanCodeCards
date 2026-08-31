@@ -31,24 +31,39 @@ struct QuizView: View {
                         Text(card.prompt)
                             .font(.title2.bold())
 
-                        Text(card.answer)
-                            .foregroundStyle(.secondary)
+                        if viewModel.isAnswerRevealed {
+                            Divider()
+
+                            Text(card.answer)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text("Reveal the answer when you are ready to grade yourself.")
+                                .foregroundStyle(.secondary)
+                        }
                     }
                     .frame(maxWidth: .infinity, minHeight: 260, alignment: .topLeading)
                     .padding(CCLayout.large)
                     .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
 
-                    HStack {
-                        Button("Needs practice") {
-                            viewModel.markCurrentAnswer(isCorrect: false)
-                        }
-                        .buttonStyle(.bordered)
+                    if viewModel.isAnswerRevealed {
+                        HStack {
+                            Button("Needs practice") {
+                                viewModel.markCurrentAnswer(isCorrect: false)
+                            }
+                            .buttonStyle(.bordered)
 
-                        Button("I knew it") {
-                            viewModel.markCurrentAnswer(isCorrect: true)
+                            Button("I knew it") {
+                                viewModel.markCurrentAnswer(isCorrect: true)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(CCColor.positive)
+                        }
+                    } else {
+                        Button("Reveal answer") {
+                            viewModel.revealAnswer()
                         }
                         .buttonStyle(.borderedProminent)
-                        .tint(CCColor.positive)
+                        .tint(CCColor.accent)
                     }
                 }
 

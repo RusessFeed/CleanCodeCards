@@ -10,10 +10,12 @@ final class QuizViewModelTests: XCTestCase {
         ]
         let viewModel = QuizViewModel(cards: cards)
 
+        viewModel.revealAnswer()
         viewModel.markCurrentAnswer(isCorrect: true)
 
         XCTAssertEqual(viewModel.correctAnswers, 1)
         XCTAssertEqual(viewModel.currentCard?.title, "Two")
+        XCTAssertFalse(viewModel.isAnswerRevealed)
     }
 
     func testRestartClearsProgress() {
@@ -23,12 +25,14 @@ final class QuizViewModelTests: XCTestCase {
         ]
         let viewModel = QuizViewModel(cards: cards)
 
+        viewModel.revealAnswer()
         viewModel.markCurrentAnswer(isCorrect: true)
         viewModel.restart()
 
         XCTAssertEqual(viewModel.correctAnswers, 0)
         XCTAssertEqual(viewModel.currentIndex, 0)
         XCTAssertTrue(viewModel.answeredCardIDs.isEmpty)
+        XCTAssertFalse(viewModel.isAnswerRevealed)
     }
 
     func testQuizProgressTracksAnsweredCards() {
@@ -38,6 +42,7 @@ final class QuizViewModelTests: XCTestCase {
         ]
         let viewModel = QuizViewModel(cards: cards)
 
+        viewModel.revealAnswer()
         viewModel.markCurrentAnswer(isCorrect: true)
 
         XCTAssertEqual(viewModel.answeredCount, 1)
@@ -53,10 +58,35 @@ final class QuizViewModelTests: XCTestCase {
         ]
         let viewModel = QuizViewModel(cards: cards)
 
+        viewModel.revealAnswer()
         viewModel.markCurrentAnswer(isCorrect: true)
+        viewModel.revealAnswer()
         viewModel.markCurrentAnswer(isCorrect: false)
 
         XCTAssertTrue(viewModel.isFinished)
         XCTAssertEqual(viewModel.accuracyText, "50% accuracy")
+    }
+
+    func testAnswerMustBeRevealedBeforeGrading() {
+        let viewModel = QuizViewModel(cards: [
+            StudyCard(topic: .swift, title: "One", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+
+        viewModel.markCurrentAnswer(isCorrect: true)
+
+        XCTAssertEqual(viewModel.correctAnswers, 0)
+        XCTAssertEqual(viewModel.answeredCount, 0)
+        XCTAssertFalse(viewModel.canGradeCurrentCard)
+    }
+
+    func testRevealAnswerAllowsGradingCurrentCard() {
+        let viewModel = QuizViewModel(cards: [
+            StudyCard(topic: .swift, title: "One", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+
+        viewModel.revealAnswer()
+
+        XCTAssertTrue(viewModel.isAnswerRevealed)
+        XCTAssertTrue(viewModel.canGradeCurrentCard)
     }
 }

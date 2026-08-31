@@ -5,6 +5,7 @@ final class QuizViewModel: ObservableObject {
     @Published private(set) var currentIndex = 0
     @Published private(set) var correctAnswers = 0
     @Published private(set) var answeredCardIDs: Set<UUID> = []
+    @Published private(set) var isAnswerRevealed = false
 
     let cards: [StudyCard]
 
@@ -45,14 +46,26 @@ final class QuizViewModel: ObservableObject {
         !cards.isEmpty && answeredCount == cards.count
     }
 
+    var canGradeCurrentCard: Bool {
+        currentCard != nil && isAnswerRevealed && !isFinished
+    }
+
+    func revealAnswer() {
+        guard currentCard != nil, !isFinished else { return }
+        isAnswerRevealed = true
+    }
+
     func markCurrentAnswer(isCorrect: Bool) {
-        guard let card = currentCard, !answeredCardIDs.contains(card.id) else { return }
+        guard canGradeCurrentCard,
+              let card = currentCard,
+              !answeredCardIDs.contains(card.id) else { return }
 
         answeredCardIDs.insert(card.id)
         if isCorrect { correctAnswers += 1 }
 
         if currentIndex < cards.count - 1 {
             currentIndex += 1
+            isAnswerRevealed = false
         }
     }
 
@@ -60,5 +73,6 @@ final class QuizViewModel: ObservableObject {
         currentIndex = 0
         correctAnswers = 0
         answeredCardIDs = []
+        isAnswerRevealed = false
     }
 }
