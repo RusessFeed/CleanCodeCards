@@ -27,6 +27,18 @@ final class CardsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.filteredCards.map(\.title), ["Mocks"])
     }
 
+    func testFiltersCardsByDifficulty() {
+        let store = DeckStore(cards: [
+            StudyCard(topic: .swift, difficulty: .easy, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip"),
+            StudyCard(topic: .testing, difficulty: .hard, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+        let viewModel = CardsViewModel(deckStore: store)
+
+        viewModel.selectedDifficulty = .hard
+
+        XCTAssertEqual(viewModel.filteredCards.map(\.title), ["Fakes"])
+    }
+
     func testFavoritesFilterShowsOnlyMarkedCards() {
         let swiftCard = StudyCard(topic: .swift, title: "Structs", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
         let testingCard = StudyCard(topic: .testing, title: "Fakes", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
@@ -153,10 +165,11 @@ final class CardsViewModelTests: XCTestCase {
         ]))
 
         viewModel.selectedTopic = .swift
+        viewModel.selectedDifficulty = .hard
         viewModel.showsFavoritesOnly = true
         viewModel.searchText = "state"
 
-        XCTAssertEqual(viewModel.filterSummaryText, "Swift · Favorites · Search: state")
+        XCTAssertEqual(viewModel.filterSummaryText, "Swift · Hard · Favorites · Search: state")
     }
 
     func testFilterSummaryUsesDefaultTextWithoutFilters() {
@@ -187,12 +200,14 @@ final class CardsViewModelTests: XCTestCase {
 
         viewModel.searchText = "state"
         viewModel.selectedTopic = .swift
+        viewModel.selectedDifficulty = .easy
         viewModel.showsFavoritesOnly = true
 
         viewModel.clearFilters()
 
         XCTAssertEqual(viewModel.searchText, "")
         XCTAssertNil(viewModel.selectedTopic)
+        XCTAssertNil(viewModel.selectedDifficulty)
         XCTAssertFalse(viewModel.showsFavoritesOnly)
         XCTAssertFalse(viewModel.hasActiveFilters)
     }

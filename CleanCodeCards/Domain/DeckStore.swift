@@ -31,6 +31,7 @@ extension StudyCard {
     static let samples: [StudyCard] = [
         StudyCard(
             topic: .architecture,
+            difficulty: .medium,
             title: "MVVM boundaries",
             prompt: "Where should formatting and business rules live in MVVM?",
             answer: "Views render state, view models prepare state and handle UI actions, while business rules belong in domain services or use cases.",
@@ -38,6 +39,7 @@ extension StudyCard {
         ),
         StudyCard(
             topic: .swift,
+            difficulty: .easy,
             title: "Value semantics",
             prompt: "Why are structs commonly used for app state in SwiftUI?",
             answer: "They make state changes explicit, predictable, and cheap to reason about when SwiftUI recalculates view bodies.",
@@ -45,6 +47,7 @@ extension StudyCard {
         ),
         StudyCard(
             topic: .testing,
+            difficulty: .easy,
             title: "Test seams",
             prompt: "How do protocols help unit testing networking or persistence?",
             answer: "A protocol hides the concrete implementation, so tests can inject deterministic fakes without touching real services.",
@@ -52,6 +55,7 @@ extension StudyCard {
         ),
         StudyCard(
             topic: .performance,
+            difficulty: .hard,
             title: "List rendering",
             prompt: "What is a common cause of slow SwiftUI lists?",
             answer: "Doing expensive calculations or unstable identity work inside every row render can cause repeated recomputation.",
@@ -59,6 +63,7 @@ extension StudyCard {
         ),
         StudyCard(
             topic: .architecture,
+            difficulty: .hard,
             title: "Single responsibility",
             prompt: "How would you refactor a massive view model?",
             answer: "Extract formatting, validation, data access, and navigation decisions into smaller collaborators with clear protocols.",
@@ -66,6 +71,7 @@ extension StudyCard {
         ),
         StudyCard(
             topic: .testing,
+            difficulty: .medium,
             title: "Meaningful assertions",
             prompt: "What makes a unit test useful rather than decorative?",
             answer: "It verifies observable behavior, has deterministic inputs, and fails with a clear reason when the behavior regresses.",

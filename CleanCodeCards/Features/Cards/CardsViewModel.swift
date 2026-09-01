@@ -30,6 +30,7 @@ final class CardsViewModel: ObservableObject {
     }
 
     @Published var selectedTopic: StudyCard.Topic?
+    @Published var selectedDifficulty: StudyCard.Difficulty?
     @Published var searchText = ""
     @Published var showsFavoritesOnly = false
     @Published var sortOrder: SortOrder = .original
@@ -42,9 +43,12 @@ final class CardsViewModel: ObservableObject {
 
     var filteredCards: [StudyCard] {
         let topicCards = deckStore.cards(matching: selectedTopic)
+        let difficultyCards = selectedDifficulty.map { difficulty in
+            topicCards.filter { $0.difficulty == difficulty }
+        } ?? topicCards
         let favoriteCards = showsFavoritesOnly
-            ? topicCards.filter { deckStore.isFavorite($0) }
-            : topicCards
+            ? difficultyCards.filter { deckStore.isFavorite($0) }
+            : difficultyCards
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard !query.isEmpty else { return sorted(favoriteCards) }
@@ -111,6 +115,10 @@ final class CardsViewModel: ObservableObject {
             filters.append(selectedTopic.rawValue)
         }
 
+        if let selectedDifficulty {
+            filters.append(selectedDifficulty.rawValue)
+        }
+
         if showsFavoritesOnly {
             filters.append("Favorites")
         }
@@ -129,12 +137,14 @@ final class CardsViewModel: ObservableObject {
 
     var hasActiveFilters: Bool {
         selectedTopic != nil
+            || selectedDifficulty != nil
             || showsFavoritesOnly
             || !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     func clearFilters() {
         selectedTopic = nil
+        selectedDifficulty = nil
         showsFavoritesOnly = false
         searchText = ""
     }

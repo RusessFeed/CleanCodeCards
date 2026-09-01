@@ -14,6 +14,7 @@ struct CardsView: View {
                     )
                     TopicFilter(
                         selectedTopic: $viewModel.selectedTopic,
+                        selectedDifficulty: $viewModel.selectedDifficulty,
                         showsFavoritesOnly: $viewModel.showsFavoritesOnly
                     )
                     SortPicker(sortOrder: $viewModel.sortOrder)
@@ -225,6 +226,7 @@ private struct SummaryPill: View {
 
 private struct TopicFilter: View {
     @Binding var selectedTopic: StudyCard.Topic?
+    @Binding var selectedDifficulty: StudyCard.Difficulty?
     @Binding var showsFavoritesOnly: Bool
 
     var body: some View {
@@ -241,6 +243,16 @@ private struct TopicFilter: View {
                 ForEach(StudyCard.Topic.allCases) { topic in
                     TopicChip(title: topic.rawValue, systemImage: topic.systemImage, isSelected: selectedTopic == topic) {
                         selectedTopic = topic
+                    }
+                }
+
+                ForEach(StudyCard.Difficulty.allCases) { difficulty in
+                    TopicChip(
+                        title: difficulty.rawValue,
+                        systemImage: difficulty.systemImage,
+                        isSelected: selectedDifficulty == difficulty
+                    ) {
+                        selectedDifficulty = difficulty
                     }
                 }
             }
@@ -275,9 +287,15 @@ private struct StudyCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: CCLayout.medium) {
             HStack {
-                Label(card.topic.rawValue, systemImage: card.topic.systemImage)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(CCColor.accent)
+                VStack(alignment: .leading, spacing: 4) {
+                    Label(card.topic.rawValue, systemImage: card.topic.systemImage)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(CCColor.accent)
+
+                    Label(card.difficulty.rawValue, systemImage: card.difficulty.systemImage)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
 
                 Spacer()
 
