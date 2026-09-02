@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FF252A9F19967B65031B79B /* DeckStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66A86B49963A076287C3ABE /* DeckStore.swift */; };
+		2295A16B8BB77562B6B9A7BD /* ReviewSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5656B613527963A667B6D5 /* ReviewSchedule.swift */; };
 		32719CDE6F67F42F11B09CFC /* CleanCodeCardsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8188DE8773B73F787E9375 /* CleanCodeCardsApp.swift */; };
 		473E7A525271B94C3E495C3E /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C7E3C29BFC3727F74C0AC /* QuizView.swift */; };
 		561B90BF159BD3ECB3AA912B /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4CE5A0D6F761561435DFF6 /* StudyCard.swift */; };
@@ -16,6 +17,7 @@
 		7F2A6A2482A258FA16CD161B /* CCLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33500997DC7D6FE6A4CC68B7 /* CCLayout.swift */; };
 		8A89D09A4C030B12CC20DC81 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF9B4FFEAF82D5D601C5413 /* QuizViewModel.swift */; };
 		8E3D3B10BE36143EB0319E4D /* QuizViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE9AC11F6DF06C95E334C0 /* QuizViewModelTests.swift */; };
+		C919F56D7567453EB17DB494 /* SpacedRepetitionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DD6ABA4CA8E0A232455128 /* SpacedRepetitionEngineTests.swift */; };
 		CC51F04CD0A89294F56873B2 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57A4CD020C0C0BDFBCD6452 /* CardsView.swift */; };
 		E41D41B177C907EB60910B51 /* CCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494A661B3C5A913493897956 /* CCColor.swift */; };
 		F2914B55F039F340ED327291 /* CardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D825A536640A55EF8BC5119 /* CardsViewModel.swift */; };
@@ -35,6 +37,7 @@
 		1C8188DE8773B73F787E9375 /* CleanCodeCardsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanCodeCardsApp.swift; sourceTree = "<group>"; };
 		1D6CD5D781206DDD580B92D5 /* CardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewModelTests.swift; sourceTree = "<group>"; };
 		33500997DC7D6FE6A4CC68B7 /* CCLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCLayout.swift; sourceTree = "<group>"; };
+		35DD6ABA4CA8E0A232455128 /* SpacedRepetitionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedRepetitionEngineTests.swift; sourceTree = "<group>"; };
 		3D4CE5A0D6F761561435DFF6 /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
 		494A661B3C5A913493897956 /* CCColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCColor.swift; sourceTree = "<group>"; };
 		4EFE9AC11F6DF06C95E334C0 /* QuizViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModelTests.swift; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 		7EA1D46A7FCA46B720EDDCCA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D25F0A10FEF6FE53A70D17C6 /* CleanCodeCards.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CleanCodeCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D57A4CD020C0C0BDFBCD6452 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
+		DA5656B613527963A667B6D5 /* ReviewSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSchedule.swift; sourceTree = "<group>"; };
 		DDF9B4FFEAF82D5D601C5413 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
 		E66A86B49963A076287C3ABE /* DeckStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,6 +103,7 @@
 			children = (
 				1D6CD5D781206DDD580B92D5 /* CardsViewModelTests.swift */,
 				4EFE9AC11F6DF06C95E334C0 /* QuizViewModelTests.swift */,
+				35DD6ABA4CA8E0A232455128 /* SpacedRepetitionEngineTests.swift */,
 			);
 			path = CleanCodeCardsTests;
 			sourceTree = "<group>";
@@ -107,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				E66A86B49963A076287C3ABE /* DeckStore.swift */,
+				DA5656B613527963A667B6D5 /* ReviewSchedule.swift */,
 				3D4CE5A0D6F761561435DFF6 /* StudyCard.swift */,
 			);
 			path = Domain;
@@ -223,6 +229,7 @@
 				0FF252A9F19967B65031B79B /* DeckStore.swift in Sources */,
 				473E7A525271B94C3E495C3E /* QuizView.swift in Sources */,
 				8A89D09A4C030B12CC20DC81 /* QuizViewModel.swift in Sources */,
+				2295A16B8BB77562B6B9A7BD /* ReviewSchedule.swift in Sources */,
 				73EC0C37B5011F3439BF4449 /* RootView.swift in Sources */,
 				561B90BF159BD3ECB3AA912B /* StudyCard.swift in Sources */,
 			);
@@ -234,6 +241,7 @@
 			files = (
 				734773635A826590EE9CA991 /* CardsViewModelTests.swift in Sources */,
 				8E3D3B10BE36143EB0319E4D /* QuizViewModelTests.swift in Sources */,
+				C919F56D7567453EB17DB494 /* SpacedRepetitionEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
