@@ -40,6 +40,13 @@ struct ReviewSchedule: Equatable {
     }
 }
 
+struct ReviewPlanOption: Identifiable, Equatable {
+    let rating: ReviewRating
+    let schedule: ReviewSchedule
+
+    var id: String { rating.id }
+}
+
 enum SpacedRepetitionEngine {
     static let minimumEaseFactor = 1.3
     static let initial = ReviewSchedule(intervalDays: 0, easeFactor: 2.5, repetitionCount: 0)

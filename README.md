@@ -20,6 +20,7 @@ CleanCodeCards is a compact SwiftUI portfolio app for practicing iOS interview a
 - Reveal-answer quiz flow before self-grading
 - Quiz completion and accuracy summary
 - Pure spaced-repetition scheduling model with unit tests
+- Review schedule preview for every quiz self-grade
 - MVVM-style view models
 - XCTest coverage for filtering, search, and quiz state
 

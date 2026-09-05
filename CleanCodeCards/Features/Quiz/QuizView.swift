@@ -20,6 +20,8 @@ struct QuizView: View {
                     totalCount: viewModel.cards.count
                 )
 
+                ReviewSchedulePreview(options: viewModel.reviewPlanOptions)
+
                 if viewModel.isFinished {
                     CompletionCard(scoreText: viewModel.scoreText, accuracyText: viewModel.accuracyText)
                 } else if let card = viewModel.currentCard {
@@ -78,6 +80,42 @@ struct QuizView: View {
             .background(CCColor.canvas)
             .navigationTitle("Quiz")
         }
+    }
+}
+
+private struct ReviewSchedulePreview: View {
+    let options: [ReviewPlanOption]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: CCLayout.medium) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Review plan")
+                    .font(.subheadline.weight(.semibold))
+
+                Text("See how each self-grade changes the next practice interval.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: CCLayout.small), count: 2), spacing: CCLayout.small) {
+                ForEach(options) { option in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label(option.rating.rawValue, systemImage: option.rating.systemImage)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(CCColor.accent)
+
+                        Text(option.schedule.summaryText)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(CCLayout.small)
+                    .background(CCColor.canvas, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius - 8))
+                }
+            }
+        }
+        .padding(CCLayout.medium)
+        .background(CCColor.card, in: RoundedRectangle(cornerRadius: CCLayout.cardRadius))
     }
 }
 

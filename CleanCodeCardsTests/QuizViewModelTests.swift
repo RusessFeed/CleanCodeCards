@@ -89,4 +89,18 @@ final class QuizViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isAnswerRevealed)
         XCTAssertTrue(viewModel.canGradeCurrentCard)
     }
+
+    func testReviewPlanOptionsShowInitialIntervalsForEveryRating() {
+        let viewModel = QuizViewModel(cards: [
+            StudyCard(topic: .swift, title: "One", prompt: "Prompt", answer: "Answer", interviewTip: "Tip")
+        ])
+
+        XCTAssertEqual(viewModel.reviewPlanOptions.map(\.rating), [.again, .hard, .good, .easy])
+        XCTAssertEqual(viewModel.reviewPlanOptions.map { $0.schedule.summaryText }, [
+            "Review tomorrow",
+            "Review tomorrow",
+            "Review tomorrow",
+            "Review in 4 days"
+        ])
+    }
 }

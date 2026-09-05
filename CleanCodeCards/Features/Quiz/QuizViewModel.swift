@@ -50,6 +50,15 @@ final class QuizViewModel: ObservableObject {
         currentCard != nil && isAnswerRevealed && !isFinished
     }
 
+    var reviewPlanOptions: [ReviewPlanOption] {
+        ReviewRating.allCases.map { rating in
+            ReviewPlanOption(
+                rating: rating,
+                schedule: SpacedRepetitionEngine.nextSchedule(after: SpacedRepetitionEngine.initial, rating: rating)
+            )
+        }
+    }
+
     func revealAnswer() {
         guard currentCard != nil, !isFinished else { return }
         isAnswerRevealed = true
